@@ -5,6 +5,8 @@ const { Customer }= db.model;
 const path =require('path');
 
 app.use(require('body-parser').json())
+app.use(require('body-parser').urlencoded())
+app.use(require('method-override')('_method'));
 app.use(express.static(path.join(__dirname, "")));
 
 app.get('/api/customers', (req, res, next)=>{//gets all the customers
@@ -17,10 +19,11 @@ app.get('/api/customers', (req, res, next)=>{//gets all the customers
 //  res.sendFile("index.html")
 // })
 
-app.post('/api/customers', (req, res, next)=>{ //creates a customer and returns it
-  const customerEmail = req.body;
-  Customer.create(customerEmail)
-  .then( customer => res.send(customer))
+app.post('/api/customers', (req, res, next)=>{
+  Customer.create(req.body)
+  .then( result => result.save())
+  .then( customer => {
+    res.json(customer)})
   .catch(next)
 })
 
