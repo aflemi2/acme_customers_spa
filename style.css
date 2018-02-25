@@ -1,0 +1,6 @@
+.customer-item:hover{
+  background-color: #4285F4;
+  color: white;
+  transition: 300ms;
+  cursor: pointer;
+}
