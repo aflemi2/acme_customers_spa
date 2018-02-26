@@ -4,32 +4,39 @@ const db = require('./db');
 const { Customer }= db.model;
 const path =require('path');
 
-app.use(require('body-parser').json())
-app.use(require('body-parser').urlencoded())
+app.use(require('body-parser').json());
+
 app.use(require('method-override')('_method'));
 app.use(express.static(path.join(__dirname, "")));
+
+app.get('/', (req, res, next)=>{ //serves the page
+ res.sendFile("index.html")
+ .catch(next)
+});
 
 app.get('/api/customers', (req, res, next)=>{//gets all the customers
   Customer.findAll()
   .then(result=> res.json(result))
-  .catch(next)
-})
+  .catch(next);
+});
 
-// app.get('/', (req, res, next)=>{ //serves the page
-//  res.sendFile("index.html")
+app.post('/api/customers', (req, res, next) => {
+  console.log('GOT TOTHIS LINE!')
+  Customer.create(req.body)
+    .then( (customer) => {
+     res.json(customer);
+    })
+    .catch(next);
+});
+
+
+// app.delete('/api/customers/:id', (req, res, next)=>{ //deletes a customer
+
 // })
 
-app.post('/api/customers', (req, res, next)=>{
-  Customer.create(req.body)
-  .then( result => result.save())
-  .then( customer => {
-    res.json(customer)})
-  .catch(next)
-})
-
-app.delete('/api/customers/:id', (req, res, next)=>{ //deletes a customer
-
-})
+app.use((err, req, res, next)=> {
+    res.status(err.status || 500).send({error: err.message});
+  });
 
 db.sync()
 .then(()=>db.seed());

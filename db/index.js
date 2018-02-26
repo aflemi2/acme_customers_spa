@@ -9,7 +9,7 @@ const seed = ()=> {
   return Promise.all([
  Customer.create({email:"moe@gmail.com"}),
  Customer.create({email:"larry@gmail.com"}),
- Customer.create({email:"curly@gmail.com"})
+ Customer.create({email:"curly@gmail.com"}),
 ])
 }
 

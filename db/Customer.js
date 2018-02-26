@@ -6,7 +6,7 @@ const Customer = conn.define( 'customer', {
     type: Sequelize.STRING,
     unique: true,
     allowNull: false,
-    isEmail: true
+    validate: { isEmail: true }
   }
 })
 

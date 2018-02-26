@@ -5,24 +5,19 @@ fetch('/api/customers')
     console.log('this is your error:' + JSON.stringify(error))
   })
 
-const cButton =document.getElementById('createButton')
 
-cButton.addEventListener('click', () => {
-  let email = document.getElementById('email');
+document.getElementById('createButton').addEventListener('click', () => {
   fetch('/api/customers', {
-   headers: {
-    'Content-Type': 'application/json'
-   },
-   method: 'post',
-   body: JSON.stringify({
-    email: email.value
+    method: 'POST',
+    body: JSON.stringify({
+      email: document.getElementById('email').value
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
   })
-})
-  .then(result => result.json())
-  .then((customer) => {
-    console.log('working!')
-    setUp({'key':customer});
-  })
+  .catch(error => console.error('Error:', error))
+.then(response => console.log('Success:', response));
 })
 
 
@@ -34,18 +29,21 @@ const createNode = function(selector){
 
 //SetUp function loads customers Moe, Larry, Curly with corresponding Mortal Combat image
 const setUp = (data)=>{
-Object.keys(data).forEach( key => {
+data.forEach( key => {
   const parent = document.getElementById('customerList');
   let newElement = createNode('li'),
   img = createNode('img'),
   span = createNode('span');
 
-  img.src = `/img/MC${(data[key].id)%10}.jpg`;
-  span.innerHTML= data[key].email
+  img.src = `/img/MC${(key.id)%10}.jpg`;
+  span.innerHTML= key.email
 
   newElement.appendChild(img);
   newElement.appendChild(span);
   parent.appendChild(newElement);
+  newElement.addEventListener('click', function(){
+    newElement.remove();
+  })
 })
 }
 
