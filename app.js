@@ -7,7 +7,7 @@ fetch('/api/customers')
 
 
 document.getElementById('createButton').addEventListener('click', (e) => {
-  // e.preventDefault();
+   e.preventDefault();
   fetch('/api/customers', {
     method: 'POST',
     body: JSON.stringify({
@@ -17,8 +17,11 @@ document.getElementById('createButton').addEventListener('click', (e) => {
       'Content-Type': 'application/json'
     }
   })
+  .then(result => result.json())
+  .then(elem => setUp([elem]))
   .catch(error => console.error('Error:', error))
 .then(response => console.log('Success:', response));
+email.value = name.value = '';
 })
 
 
