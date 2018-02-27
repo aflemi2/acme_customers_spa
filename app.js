@@ -39,7 +39,7 @@ const setUp = (data)=>{
     img = createNode('img'),
     span = createNode('span');
 
-    img.src = `/img/MC${(key.id)%10}.jpg`;
+    img.src = `/img/MC${(key.id)%10+1}.jpg`;
     span.innerHTML= key.email
 
     newElement.append(img);
