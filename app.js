@@ -2,11 +2,12 @@ fetch('/api/customers')
   .then( response => response.json())
   .then( data => setUp(data))
   .catch( function(error){
-    console.log('this is your error:' + JSON.stringify(error))
+    console.log('this is your error:' + error)
   })
 
 
-document.getElementById('createButton').addEventListener('click', () => {
+document.getElementById('createButton').addEventListener('click', (e) => {
+  // e.preventDefault();
   fetch('/api/customers', {
     method: 'POST',
     body: JSON.stringify({
@@ -29,21 +30,26 @@ const createNode = function(selector){
 
 //SetUp function loads customers Moe, Larry, Curly with corresponding Mortal Combat image
 const setUp = (data)=>{
-data.forEach( key => {
-  const parent = document.getElementById('customerList');
-  let newElement = createNode('li'),
-  img = createNode('img'),
-  span = createNode('span');
+  data.forEach( key => {
+    const parent = document.getElementById('customerList');
+    let newElement = createNode('li'),
+    img = createNode('img'),
+    span = createNode('span');
 
-  img.src = `/img/MC${(key.id)%10}.jpg`;
-  span.innerHTML= key.email
+    img.src = `/img/MC${(key.id)%10}.jpg`;
+    span.innerHTML= key.email
 
-  newElement.appendChild(img);
-  newElement.appendChild(span);
-  parent.appendChild(newElement);
-  newElement.addEventListener('click', function(){
-    newElement.remove();
+    newElement.append(img);
+    newElement.append(span);
+    parent.append(newElement);
+    newElement.addEventListener('click', function(e){
+      fetch(`/api/customers/${key.id}`, {
+       method: 'delete'
+       })
+      .then(()=> {
+        newElement.remove()
+      })
+    })
   })
-})
 }
 

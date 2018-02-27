@@ -5,7 +5,6 @@ const { Customer }= db.model;
 const path =require('path');
 
 app.use(require('body-parser').json());
-
 app.use(require('method-override')('_method'));
 app.use(express.static(path.join(__dirname, "")));
 
@@ -21,7 +20,6 @@ app.get('/api/customers', (req, res, next)=>{//gets all the customers
 });
 
 app.post('/api/customers', (req, res, next) => {
-  console.log('GOT TOTHIS LINE!')
   Customer.create(req.body)
     .then( (customer) => {
      res.json(customer);
@@ -29,10 +27,14 @@ app.post('/api/customers', (req, res, next) => {
     .catch(next);
 });
 
-
-// app.delete('/api/customers/:id', (req, res, next)=>{ //deletes a customer
-
-// })
+app.delete('/api/customers/:id', (req, res, next)=>{
+  Customer.findById(req.params.id)
+  .then( (customer) =>{
+    customer.destroy()
+  })
+  .then(()=>res.sendStatus(204))
+  .catch(next);
+})
 
 app.use((err, req, res, next)=> {
     res.status(err.status || 500).send({error: err.message});
