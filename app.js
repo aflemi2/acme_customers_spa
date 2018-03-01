@@ -21,7 +21,7 @@ document.getElementById('createButton').addEventListener('click', (e) => {
   .then(elem => setUp([elem]))
   .catch(error => console.error('Error:', error))
 .then(response => console.log('Success:', response));
-email.value = name.value = '';
+email.value = '';
 })
 
 
